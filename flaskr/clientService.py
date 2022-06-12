@@ -22,8 +22,15 @@ class AbstractClientService(ABC):
     def register_new_user(self, first_name: str, last_name: str, email: str, phone: str, password: str) -> Client:
         pass
 
+    @abstractmethod
+    def get_user_by_id(self, user_id):
+        pass
+
 
 class ClientService(AbstractClientService):
+    def get_user_by_id(self, user_id) -> Client:
+        return self._provider.get_client(user_id)
+
     def login(self, login: str, password: str) -> Client:
         if not self._provider.is_login_exist(login):
             raise error.UseNotFoundException(f'User <{login}> not exists')

@@ -1,14 +1,14 @@
 import PyQt6.QtGui
 
-import src.clientService
-from src.formUi import LoginForm
+import flaskr.clientService
+from flaskr.formUi import LoginForm
 
 from PyQt6 import QtWidgets
-from src import error
+from flaskr import error
 
 
 class LoginWindow(QtWidgets.QMainWindow, LoginForm.Ui_win_login):
-    def __init__(self, login_service: src.clientService.ClientService, parent=None):
+    def __init__(self, login_service: flaskr.clientService.ClientService, parent=None):
         super().__init__(parent)
         self._client_service = login_service
         self.setupUi(self)
@@ -32,4 +32,7 @@ class LoginWindow(QtWidgets.QMainWindow, LoginForm.Ui_win_login):
         except error.WrongPasswordException:
             # show alert that password must not be empty
             pass
+
+        #open new form
+        #send for client
 

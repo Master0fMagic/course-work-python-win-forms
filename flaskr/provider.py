@@ -6,27 +6,23 @@ import time
 
 
 class SqliteDatabaseProvider:
-    __connection = None
-
-    @classmethod
-    def get_service(cls):
-        if not cls.__connection:
-            cls.__connection = sqlite3.connect('food-delivery.db')
-        return SqliteDatabaseProvider()
-
     def execute_select(self, query: str):
-        cursor = self.__connection.cursor()
+        connection = sqlite3.connect('food-delivery.db')
+        cursor = connection.cursor()
         cursor.execute(query)
         records = cursor.fetchall()
         cursor.close()
+        connection.close()
         return records
 
     def execute_update(self, query):
-        cursor = self.__connection.cursor()
+        connection = sqlite3.connect('food-delivery.db')
+        cursor = connection.cursor()
         cursor.execute(query)
         res = cursor.fetchall()
-        self.__connection.commit()
+        connection.commit()
         cursor.close()
+        connection.close()
         return res
 
 
@@ -84,7 +80,7 @@ class SqliteDataProvider(AbstractClientProvider, AbstractOrderProvider, Abstract
     _provider = None
 
     def __init__(self):
-        self._db = SqliteDatabaseProvider.get_service()
+        self._db = SqliteDatabaseProvider()
 
     @classmethod
     def get_provider(cls) -> AbstractClientProvider:
@@ -116,7 +112,7 @@ WHERE c.email = '{login}' or c.phonenumber = '{login}';
         sql = f'''
         SELECT *
 from client c 
-where c.email = '{login}' or c.phonenumber = '{login}';
+where c.email = '{login}' or c.phonenumber = '{login}' or c.id = '{login}';
 '''
         return converter.DbResponseToClientConverter().convert(data=self._db.execute_select(sql)[0])
 
@@ -190,4 +186,3 @@ FROM product p
 WHERE p.placeid = {place_id}
 '''
         return [converter.DbResponseToProductConverter().convert(data=item) for item in self._db.execute_select(sql)]
-

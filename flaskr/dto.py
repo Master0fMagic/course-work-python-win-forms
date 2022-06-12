@@ -1,4 +1,7 @@
-class Client:
+from flask_login import UserMixin
+
+
+class Client(UserMixin):
     def __init__(self, client_id=-1, firstname="", lastname="", email="", phone_number="", password=""):
         self._firstname = firstname
         self._lastname = lastname
@@ -49,6 +52,13 @@ class FoodPlace:
     @property
     def address(self) -> str:
         return self._address
+
+    def to_dict(self):
+        return {
+            'id': self._id,
+            'name': self._name,
+            'address': self._address
+        }
 
 
 class Product:
