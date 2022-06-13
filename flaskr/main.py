@@ -28,8 +28,8 @@ def login():
     return jsonify(success=True)
 
 
-@login_required
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return jsonify(success=True)
@@ -53,11 +53,11 @@ def sing_up():
     cs = ClientService()
     client = cs.register_new_user(first_name, last_name, phone, password, email)
     login_user(client)
-    return redirect(url_for('order/get-places'))  # fixme change to status 200
+    return jsonify(success=True)
 
 
-@login_required
 @app.route('/order/get-places')
+@login_required
 def get_places():
     fs = FoodService()
     return {
@@ -65,15 +65,15 @@ def get_places():
     }
 
 
-@login_required
 @app.route('/order/get-menu/<int:food_place_id>')
+@login_required
 def get_menu_by_place(food_place_id: int):
     fs = FoodService()
     return vars(fs.get_product_list_by_food_place(food_place_id))
 
 
-@login_required
 @app.route('/order/create', methods=['POST'])
+@login_required
 def create_order():
     os = OrderService()
     order_items = request.json['items']
@@ -82,22 +82,20 @@ def create_order():
     return jsonify(success=True)
 
 
-@login_required
 @app.route('/order/history')
+@login_required
 def get_order_history():
     os = OrderService()
     return vars(os.get_short_orders_by_user(current_user.id))
 
-
-@login_required
 @app.route('/order/history/<int:order_id>')
+@login_required
 def get_order_details(order_id: int):
     os = OrderService()
     return vars(os.get_full_order(order_id))
 
-
-@login_required
 @app.route('/order/complete/<int:order_id>', methods=['POST'])
+@login_required
 def complete_order(order_id: int):
     os = OrderService()
     os.complete(order_id)
