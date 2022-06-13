@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 import dto
 import sqlite3
@@ -7,7 +8,7 @@ import time
 
 class SqliteDatabaseProvider:
     def execute_select(self, query: str):
-        connection = sqlite3.connect('food-delivery.db')
+        connection = sqlite3.connect('./food-delivery.db')
         cursor = connection.cursor()
         cursor.execute(query)
         records = cursor.fetchall()
@@ -16,7 +17,7 @@ class SqliteDatabaseProvider:
         return records
 
     def execute_update(self, query):
-        connection = sqlite3.connect('food-delivery.db')
+        connection = sqlite3.connect('./food-delivery.db')
         cursor = connection.cursor()
         cursor.execute(query)
         res = cursor.fetchall()
@@ -50,7 +51,7 @@ class AbstractOrderProvider(ABC):
         pass
 
     @abstractmethod
-    def get_full_order_info(self, order_id: int) -> dto.Order:
+    def get_order_items(self, order_id: int) -> list[dto.OrderItem]:
         pass
 
     @abstractmethod
@@ -134,22 +135,22 @@ where o.id ='{order_id}'
 '''
         return converter.DbResponseToOrderConverter().convert(data=self._db.execute_select(sql))
 
-    def get_full_order_info(self, order_id: int) -> dto.Order:
-        order = self.get_short_order_info(order_id)
+    def get_order_items(self, order_id: int) -> list[dto.OrderItem]:
         sql = f'''
         SELECT o.amount, p.id, p.name, p.description , p.price 
 FROM orderitem o join product p on p.id = o.productid
 WHERE o.orderid = '{order_id}'
 '''
-        items = [converter.DbResponseToOrderItemConverter().convert(data=item) for item in self._db.execute_select(sql)]
-        order.add_items(items)
-        return order
+        return [converter.DbResponseToOrderItemConverter().convert(data=item) for item in self._db.execute_select(sql)]
 
     def get_short_order_info_by_client(self, client_id: int) -> list[dto.Order]:
         sql = f'''
-SELECT *
+SELECT o.id, o.createdtime , o.isdelivered , o.clientid , f.name || ', ' || f.address, sum(o2.amount * p.price)
 from "order" o 
-where o.clientid = '{client_id}'
+join foodplace f on f.id = o.placeid 
+join orderitem o2 on o2.orderid = o.id 
+join product p on o2.productid = p.id 
+where o.clientid  = '{client_id}'
 '''
         return [converter.DbResponseToOrderConverter().convert(data=item) for item in self._db.execute_select(sql)]
 
@@ -160,9 +161,10 @@ INSERT INTO "order" (createdtime, isdelivered, clientid, placeid) VALUES
 '''
         order_id = int(self._db.execute_update(sql)[0][0])
         sql = f'''
-INSERT INSERT orderitem (orderid, productid, amount) VALUES
+INSERT INTO orderitem (orderid, productid, amount) VALUES
 {', '.join([f'({order_id},{item.product.id},{item.amount})' for item in items])};
 '''
+        logging.info(f'request: {sql}')
         self._db.execute_update(sql)
 
     def complete_order(self, order_id):

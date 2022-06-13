@@ -84,6 +84,14 @@ class Product:
     def price(self) -> float:
         return self._price
 
+    def to_dict(self) -> dict:
+        return {
+            'id': self._id,
+            'name': self._name,
+            'description': self._description,
+            'price': self._price
+        }
+
 
 class OrderItem:
     def __init__(self, product: Product, amount: int):
@@ -98,16 +106,23 @@ class OrderItem:
     def amount(self) -> int:
         return self._amount
 
+    def to_dict(self):
+        return {
+            "product": self._product.name,
+            "amount": self._amount,
+            "product_price": self._product.price
+        }
+
 
 class Order:
-    def __init__(self, order_id: int, created_time: int, is_delivered: bool, client_id: int, place_id: int,
-                 items: list[OrderItem] = None):
+    def __init__(self, order_id: int, created_time: int, is_delivered: bool, client_id: int, place: int,
+                 order_sum: float):
         self._id = order_id
         self._created_time = created_time
-        self._is_delivered = is_delivered
+        self._is_delivered = bool(is_delivered)
         self._client_id = client_id
-        self._place_id = place_id
-        self._items = [] if not items else items
+        self._place = place
+        self._sum = order_sum
 
     @property
     def id(self) -> int:
@@ -126,18 +141,18 @@ class Order:
         return self._client_id
 
     @property
-    def place_id(self) -> int:
-        return self._place_id
+    def place(self) -> int:
+        return self._place
 
     @property
-    def items(self) -> list[OrderItem]:
-        return self._items
+    def sum(self) -> float:
+        return self._sum
 
-    def add_items(self, items: list[OrderItem]) -> None:
-        self._items.extend(items)
-
-    def get_order_sum(self):
-        order_sum = 0
-        for item in self._items:
-            order_sum += item.amount * item.product.price
-        return order_sum
+    def to_dict(self):
+        return {
+            'id': self._id,
+            'created_time': self._created_time,
+            'is_delivered': self._is_delivered,
+            'place': self._place,
+            'sum': self._sum
+        }

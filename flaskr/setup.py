@@ -1,3 +1,5 @@
+import logging
+
 from flask_login import LoginManager
 from flask_session import Session
 from clientService import ClientService
@@ -6,6 +8,8 @@ from clientService import ClientService
 def init_app(app):
     app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
+
+    logging.basicConfig(level=logging.INFO)
 
     Session().init_app(app)
 

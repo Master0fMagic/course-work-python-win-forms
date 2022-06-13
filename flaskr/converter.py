@@ -58,7 +58,7 @@ class DbResponseToOrderItemConverter(AbstractConverter):
         if 'data' not in kwargs:
             raise KeyError('"data" is not present in kwargs')
 
-        product = DbResponseToProductConverter.convert(*(kwargs['data'][1:]))
+        product = DbResponseToProductConverter().convert(data=kwargs['data'][1:])
         return dto.OrderItem(product, kwargs['data'][0])
 
 
