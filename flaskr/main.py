@@ -1,6 +1,8 @@
 import logging
 
 from flask import Flask, request, abort, redirect, url_for, jsonify
+from flask_cors import cross_origin, CORS
+
 from setup import init_app
 from clientService import ClientService
 from orderService import OrderService
@@ -10,6 +12,7 @@ import error
 import dto
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"*": {"origins": "*", "supports_credentials": "true"}})
 init_app(app)
 
 
@@ -72,6 +75,8 @@ def sing_up():
     first_name = request.json.get('first_name')
     last_name = request.json.get('last_name')
     phone = request.json.get('phone')
+
+    print(email)
 
     if not (password and repeated_password and first_name and last_name and phone):
         abort(400, 'missing required fields')
