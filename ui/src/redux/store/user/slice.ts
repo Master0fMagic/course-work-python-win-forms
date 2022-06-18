@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {GetMenu, GetOrder, PostLogin} from "../../../api/Api";
+import {GetMenu, GetOrder, PostLogin, Register} from "../../../api/Api";
 
 export enum Statuses {
     none = "none",
@@ -52,10 +52,14 @@ const userSlice = createSlice({
             state.items = action.payload;
         },
         setOrders: (state, action: PayloadAction<GetOrder[]>) => {
+            console.log(action.payload)
             state.orders = action.payload;
+        },
+        logout: (state) => {
+            console.log("logout")
         },
     }
 })
 
 export default userSlice.reducer;
-export const { setUser, setAuth, login, setItems, setOrders } = userSlice.actions;
+export const { setUser, setAuth, login, setItems, setOrders, logout } = userSlice.actions;
