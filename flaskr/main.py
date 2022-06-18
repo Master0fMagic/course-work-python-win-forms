@@ -1,7 +1,5 @@
-import logging
-
-from flask import Flask, request, abort, redirect, url_for, jsonify
-from flask_cors import cross_origin, CORS
+from flask import Flask, request, abort, jsonify
+from flask_cors import CORS
 
 from setup import init_app
 from clientService import ClientService
@@ -212,4 +210,4 @@ def complete_order(order_id: int):
     os.complete(order_id)
     return jsonify(success=True)
 
-# app.run()
+app.run()

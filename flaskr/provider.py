@@ -151,6 +151,7 @@ join foodplace f on f.id = o.placeid
 join orderitem o2 on o2.orderid = o.id 
 join product p on o2.productid = p.id 
 where o.clientid  = '{client_id}'
+GROUP BY o.id;
 '''
         return [converter.DbResponseToOrderConverter().convert(data=item) for item in self._db.execute_select(sql)]
 
