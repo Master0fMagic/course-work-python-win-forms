@@ -64,7 +64,7 @@ const Layout = () => {
         api.createOrder({place_id: cont.idShop, items: modifiedOrder} as PostOrder).then(res => {
             api.getHistory().then(res => {
                 dispatch(setOrders(res.data.history));
-                setMessageHandler({type: "success", message: "Order has been created!"});
+                setMessageHandler({type: "success", message: "Заказ успішно сформовано!"});
                 clear();
             }).catch(err => {
                 setMessageHandler({type: "success", message: err});

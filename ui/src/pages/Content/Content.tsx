@@ -121,7 +121,7 @@ const Content = () => {
             const order = Array.from({length: value}, () => items.filter(x => x.id === selectedItem)[0]);
             dispatch(setItems({idShop: parseInt(selectedPlace), items: [...reduxItems.items, ...order]}))
         } else {
-            setMessageHandler({type: "error", message: "U cant create order for multiply shops. Only one."})
+            setMessageHandler({type: "error", message: "Можна створити заказ лише з одного закладу"})
         }
     }
 
@@ -177,7 +177,7 @@ const Content = () => {
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={selectedPlace}
-                                    placeholder={"Select place"}
+                                    placeholder={"Оберіть заклад"}
                                     label="Places"
                                     onChange={handleChange}
                                 >
@@ -192,7 +192,7 @@ const Content = () => {
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={selectedItem}
-                                    placeholder={"Select place"}
+                                    placeholder={"Оберіть заклад"}
                                     label="Places"
                                     onChange={handleChangeItem}
                                 >
@@ -229,7 +229,7 @@ const Content = () => {
                                         else
                                             setValue(valueTemp);
                                     }}
-                                    label="Count of item"
+                                    label="Кількість"
                                 />
                                 <IconButton
                                     onClick={addToCart}>
@@ -261,7 +261,7 @@ const Content = () => {
                                             <TableCell>{moment.unix(h.created_time).format("MM-DD-YYYY")}</TableCell>
                                             <TableCell>{h.place}</TableCell>
                                             <TableCell>{h.sum}</TableCell>
-                                            <TableCell>{h.is_delivered ? "Delivered" : "Not delivered"}</TableCell>
+                                            <TableCell>{h.is_delivered ? "Виконано" : "В процесі"}</TableCell>
                                         </TableRow>)) :
                                     <TableRow><TableCell align={"center"} colSpan={5}>No data found!</TableCell></TableRow>}
                             </TableBody>

@@ -33,15 +33,15 @@ const Authorization = () => {
                 <Box className={cl.content}>
                     <Typography className={cl.text}>Authorization</Typography>
                     <Box className={cl.inputs__content}>
-                        <TextField variant={"filled"} sx={{marginRight:"15px"}} onChange={handleChangeLogin} label={"Login"} value={loginU} placeholder={"Input your login"}/>
-                        <TextField variant={"filled"} onChange={handleChangePass} label={"Password"} value={password} placeholder={"Input your password"}/>
+                        <TextField variant={"filled"} sx={{marginRight:"15px"}} onChange={handleChangeLogin} label={"Login"} value={loginU} placeholder={"Введіть свій номер чи email"}/>
+                        <TextField variant={"filled"} onChange={handleChangePass} label={"Password"} value={password} placeholder={"Введіть свій пароль"}/>
                     </Box>
                     <Box width={"30%"} display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"}>
                         <Button sx={{width:"100%", background:"var(--main)", "&:hover":{background:"#5d5a73"}, fontWeight:"600"}} variant={"contained"} disabled={password.length < 1 || loginU.length < 1} onClick={authorize}>
-                            Login
+                            Увійти
                         </Button>
                         <Box onClick={e=>navigate(PATH.REGISTER)} sx={{fontSize:"14px", cursor:"pointer", "&:hover":{color:"red"}}}>
-                            Doesnt have account?
+                            Не маєте аккаунту? Зареєструватись
                         </Box>
                     </Box>
                 </Box>
