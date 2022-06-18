@@ -167,18 +167,18 @@ const Content = () => {
                             severity={messageHandler.type}>{messageHandler.message}
                         </Alert>}
                     </Grid>
-                    <h2 id="parent-modal-title">Create new order</h2>
+                    <h2 id="parent-modal-title">ЗРОБИТИ ЗАМОВЛЕННЯ</h2>
                     <Box display={"flex"} flexDirection={"column"} alignItems={"center"} width={"100%"}
                          maxHeight={"600px"} sx={{"overflowY": "auto"}}>
                         <Box className={cl.content}>
                             <FormControl sx={{minWidth: "200px", marginBottom: "10px"}}>
-                                <InputLabel id="demo-simple-select-label">Places</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Заклади</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={selectedPlace}
                                     placeholder={"Оберіть заклад"}
-                                    label="Places"
+                                    label="Заклади"
                                     onChange={handleChange}
                                 >
                                     {places && places.map(p => (
@@ -187,13 +187,13 @@ const Content = () => {
                                 </Select>
                             </FormControl>
                             <FormControl disabled={!selectedPlace} sx={{minWidth: "200px", marginBottom: "10px"}}>
-                                <InputLabel id="demo-simple-select-label">Items</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Меню</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={selectedItem}
                                     placeholder={"Оберіть заклад"}
-                                    label="Places"
+                                    label="Заклади"
                                     onChange={handleChangeItem}
                                 >
                                     {items && items.map(i => (
@@ -242,28 +242,28 @@ const Content = () => {
             </Modal>
             {loading ? <CircularProgress/> :
                 <Box display={"flex"} width={"100%"} flexDirection={"column"} alignItems={"center"}>
-                    <Button sx={{marginBottom:"15px"}} variant={"contained"} onClick={e => setModal(true)}>Create new order</Button>
+                    <Button sx={{marginBottom:"15px"}} variant={"contained"} onClick={e => setModal(true)}>Зробити замовлення</Button>
                     <TableContainer sx={{width:"50%"}} component={Paper}>
                         <Table size={"medium"}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Time</TableCell>
-                                    <TableCell>Place</TableCell>
-                                    <TableCell>Sum</TableCell>
-                                    <TableCell>Is Delivered</TableCell>
+                                    <TableCell>№</TableCell>
+                                    <TableCell>Дата</TableCell>
+                                    <TableCell>Заклад</TableCell>
+                                    <TableCell>Сума</TableCell>
+                                    <TableCell>Статус</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {history.length > 0 ? history.map(h => (
                                         <TableRow key={h.id}>
                                             <TableCell>{h.id}</TableCell>
-                                            <TableCell>{moment.unix(h.created_time).format("MM-DD-YYYY")}</TableCell>
+                                            <TableCell>{moment.unix(h.created_time).format("MM-DD-YYYY, hh:mm")}</TableCell>
                                             <TableCell>{h.place}</TableCell>
                                             <TableCell>{h.sum}</TableCell>
                                             <TableCell>{h.is_delivered ? "Виконано" : "В процесі"}</TableCell>
                                         </TableRow>)) :
-                                    <TableRow><TableCell align={"center"} colSpan={5}>No data found!</TableCell></TableRow>}
+                                    <TableRow><TableCell align={"center"} colSpan={5}>Замовлень не знайдено!</TableCell></TableRow>}
                             </TableBody>
                         </Table>
                     </TableContainer>

@@ -143,10 +143,10 @@ const Layout = () => {
                         <Table sx={{maxHeight:"500px", overflowY:"auto"}} size={"medium"}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Product</TableCell>
-                                    <TableCell>Price per 1</TableCell>
-                                    <TableCell>Count</TableCell>
-                                    <TableCell>Sum</TableCell>
+                                    <TableCell>Продукт</TableCell>
+                                    <TableCell>Ціна за од.</TableCell>
+                                    <TableCell>Кількість</TableCell>
+                                    <TableCell>Сума</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -159,8 +159,8 @@ const Layout = () => {
                                         </TableRow>)) :
                                     <TableRow><TableCell colSpan={4}>
                                         <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
-                                            <h2 id="parent-modal-title">Is empty.</h2>
-                                            <Button onClick={goToCreate} variant={"contained"}>Create order</Button>
+                                            <h2 id="parent-modal-title">Пусто.</h2>
+                                            <Button onClick={goToCreate} variant={"contained"}>Заробити замовлення</Button>
                                         </Box></TableCell></TableRow>}
                             </TableBody>
                         </Table>
