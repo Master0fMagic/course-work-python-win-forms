@@ -31,10 +31,10 @@ const Authorization = () => {
         <Box className={cl.container}>
             <Box className={cl.window}>
                 <Box className={cl.content}>
-                    <Typography className={cl.text}>Authorization</Typography>
+                    <Typography className={cl.text}>Вхід</Typography>
                     <Box className={cl.inputs__content}>
-                        <TextField variant={"filled"} sx={{marginRight:"15px"}} onChange={handleChangeLogin} label={"Login"} value={loginU} placeholder={"Введіть свій номер чи email"}/>
-                        <TextField variant={"filled"} onChange={handleChangePass} label={"Password"} value={password} placeholder={"Введіть свій пароль"}/>
+                        <TextField variant={"filled"} sx={{marginRight:"15px"}} onChange={handleChangeLogin} label={"Логін"} value={loginU} placeholder={"Введіть свій номер чи email"}/>
+                        <TextField variant={"filled"} onChange={handleChangePass} label={"Пароль"} value={password} placeholder={"Введіть свій пароль"}/>
                     </Box>
                     <Box width={"30%"} display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"}>
                         <Button sx={{width:"100%", background:"var(--main)", "&:hover":{background:"#5d5a73"}, fontWeight:"600"}} variant={"contained"} disabled={password.length < 1 || loginU.length < 1} onClick={authorize}>

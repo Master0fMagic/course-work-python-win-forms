@@ -48,17 +48,17 @@ const Registration = () => {
         <Box className={cl.container}>
             <Box className={cl.window}>
                 <Box className={cl.content}>
-                    <Typography className={cl.text}>Registration</Typography>
+                    <Typography className={cl.text}>Реєстрація</Typography>
                     <Box className={cl.inputs__content}>
-                        <TextField variant={"filled"} onChange={handleChangeFirst} label={"FirstName"} value={firstName} placeholder={"Введіть ім'я"}/>
-                        <TextField variant={"filled"} onChange={handleChangeLast} label={"LastName"} value={lastName} placeholder={"Введіть прізвище"}/>
+                        <TextField variant={"filled"} onChange={handleChangeFirst} label={"Ім'я"} value={firstName} placeholder={"Введіть ім'я"}/>
+                        <TextField variant={"filled"} onChange={handleChangeLast} label={"Прізвище"} value={lastName} placeholder={"Введіть прізвище"}/>
                         <TextField variant={"filled"} onChange={handleChangeEmail} label={"Email"} value={email} placeholder={"Введіть електронну пошту"}/>
-                        <TextField variant={"filled"} onChange={handleChangePass} label={"Password"} value={password} placeholder={"Введіть пароль"}/>
-                        <TextField variant={"filled"} onChange={handleChangePhone} label={"Phone"} value={phoneNumber} placeholder={"Введіть номер телефону"}/>
+                        <TextField variant={"filled"} onChange={handleChangePass} label={"Пароль"} value={password} placeholder={"Введіть пароль"}/>
+                        <TextField variant={"filled"} onChange={handleChangePhone} label={"Номер телефону"} value={phoneNumber} placeholder={"Введіть номер телефону"}/>
                     </Box>
                     <Box width={"30%"} display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"}>
                         <Button sx={{width:"100%", background:"var(--main)", "&:hover":{background:"#5d5a73"}, fontWeight:"600"}} variant={"contained"} disabled={password.length < 1 || lastName.length < 1 || firstName.length < 1 || phoneNumber.length < 1} onClick={register}>
-                            Sign-up
+                            Зареєструватися
                         </Button>
                         <Box onClick={e=>navigate(PATH.AUTHORIZATION)} sx={{fontSize:"14px", cursor:"pointer", "&:hover":{color:"red"}}}>
                             Вже маєте акаунт?
