@@ -4,11 +4,18 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import cl from './Header.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {SelectUserItems} from "../../../redux/store/user/selector";
-import {setItems} from "../../../redux/store/user/slice";
+import {logout, setItems} from "../../../redux/store/user/slice";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const Header = ({setModal}) => {
 
     const items = useSelector(SelectUserItems);
+
+    const dispatch = useDispatch();
+
+    const logoutAct = () => {
+        dispatch(logout());
+    }
 
     return (
         <Box position={"relative"} marginBottom={"15px"} width={"100%"} height={"5vh"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
@@ -18,11 +25,14 @@ const Header = ({setModal}) => {
             {/*<Box className={cl.btn}>*/}
             {/*    Order list*/}
             {/*</Box>*/}
-            <Box onClick={e=>setModal(true)} className={cl.items}>
-                <IconButton>
+            <Box className={cl.items}>
+                <IconButton  onClick={e=>setModal(true)}>
                     <Badge badgeContent={items.items.length} color="success">
                         <ShoppingCartIcon color="action" />
                     </Badge>
+                </IconButton>
+                <IconButton onClick={logoutAct}>
+                        <ExitToAppIcon color="action"/>
                 </IconButton>
             </Box>
         </Box>

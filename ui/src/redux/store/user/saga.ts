@@ -1,8 +1,8 @@
 import {call, put, takeLatest, select, takeEvery} from 'redux-saga/effects';
 import {AnyAction} from "redux";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {login, setAuth, setUser, Statuses} from "./slice";
-import {PostLogin} from "../../../api/Api";
+import {login, logout, setAuth, setUser, Statuses} from "./slice";
+import {PostLogin, Register} from "../../../api/Api";
 
 import {Api} from "../../../api/Api";
 
@@ -24,6 +24,24 @@ function* loginAction({payload}: PayloadAction<PostLogin>) {
     }
 }
 
+function* logoutAction() {
+    try {
+        const api = new Api();
+        const result = yield call(
+            api.logout
+        );
+        if(!result.data)
+            throw new Error(result.message)
+
+        localStorage.removeItem('userShop');
+        yield put(setUser({}));
+        yield put(setAuth(false))
+    } catch (err) {
+        console.log(err.message)
+    }
+}
+
 export default function* watchUser() {
     yield takeLatest(login.type, loginAction);
+    yield takeLatest(logout.type, logoutAction);
 }

@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Alert, AlertProps, Box, Button, Grid, IconButton, TextField, Typography} from "@mui/material";
 
 import cl from './Registration.module.css';
 import {useDispatch} from "react-redux";
-import {login} from "../../redux/store/user/slice";
+import {login, setOrders} from "../../redux/store/user/slice";
 import {useNavigate} from "react-router";
 import {PATH} from "../../routes";
+import {Api, Register} from "../../api/Api";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Registration = () => {
 
@@ -16,6 +18,7 @@ const Registration = () => {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [messageHandler, setMessageHandler] = useState({type: "" as AlertProps["severity"], message: ""});
 
     const navigate = useNavigate();
 
@@ -41,11 +44,43 @@ const Registration = () => {
     }
 
     const register = () => {
-        console.log("register")
+        const body = {email: email, first_name: firstName, last_name: lastName, password: password, repeated_password: password, phone: phoneNumber} as Register
+        const promises = [];
+        const api = new Api();
+        const promise1 = new Promise((resolve, reject) => {
+            api.register(body).then(res => {
+                setMessageHandler({type: "success", message: "Registered."})
+                resolve(true);
+            }).catch(err => {
+                setMessageHandler({type: "error", message: err})
+                reject(err);
+            });
+        })
+
+        promises.push(promise1);
+
+        Promise.all(promises).then().catch();
     }
 
     return (
         <Box className={cl.container}>
+            <Grid sx={{marginBottom: "30px"}} item xs={12}>
+                {messageHandler.message.length > 0 && <Alert
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                setMessageHandler({...messageHandler, message: ""})
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit"/>
+                        </IconButton>
+                    }
+                    severity={messageHandler.type}>{messageHandler.message}
+                </Alert>}
+            </Grid>
             <Box className={cl.window}>
                 <Box className={cl.content}>
                     <Typography className={cl.text}>Реєстрація</Typography>
