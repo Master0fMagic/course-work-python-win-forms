@@ -138,7 +138,7 @@ const Layout = () => {
                             severity={messageHandler.type}>{messageHandler.message}
                         </Alert>}
                     </Grid>
-                    <h2 id="parent-modal-title">Your order</h2>
+                    <h2 id="parent-modal-title">Ваше замовлення</h2>
                     <TableContainer component={Paper}>
                         <Table sx={{maxHeight:"500px", overflowY:"auto"}} size={"medium"}>
                             <TableHead>
@@ -160,18 +160,18 @@ const Layout = () => {
                                     <TableRow><TableCell colSpan={4}>
                                         <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
                                             <h2 id="parent-modal-title">Пусто.</h2>
-                                            <Button onClick={goToCreate} variant={"contained"}>Заробити замовлення</Button>
+                                            <Button onClick={goToCreate} variant={"contained"}>Зробити замовлення</Button>
                                         </Box></TableCell></TableRow>}
                             </TableBody>
                         </Table>
                         <Box display={"flex"} justifyContent={"flex-end"} marginRight={"10px"} padding={"10px 0px"}>
-                            Full price: {getGroups().reduce((a, b) => a + b.count*b.price, 0)} грн
+                            Сума: {getGroups().reduce((a, b) => a + b.count*b.price, 0)} грн
                         </Box>
                     </TableContainer>
                     <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
                         <Button disabled={items.length < 1} variant={"contained"} sx={{marginRight: "15px"}}
-                                onClick={makeOrder}>Create</Button>
-                        <Button disabled={items.length < 1} variant={"contained"} onClick={clear}>Clear</Button>
+                                onClick={makeOrder}>Створити</Button>
+                        <Button disabled={items.length < 1} variant={"contained"} onClick={clear}>Очистити</Button>
                     </Box>
                 </Box>
             </Modal>

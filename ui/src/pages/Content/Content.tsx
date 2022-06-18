@@ -309,15 +309,15 @@ const Content = () => {
                             justifyContent: "flex-start",
                             width: 800
                         }}>
-                            <h2 id="parent-modal-title">Your order #{selectedId}</h2>
+                            <h2 id="parent-modal-title">Замовлення #{selectedId}</h2>
                             <TableContainer component={Paper}>
                                 <Table sx={{maxHeight:"500px", overflowY:"auto"}}>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Product</TableCell>
-                                            <TableCell>Price per 1</TableCell>
-                                            <TableCell>Count</TableCell>
-                                            <TableCell>Sum</TableCell>
+                                            <TableCell>Продукт</TableCell>
+                                            <TableCell>Ціна за од.</TableCell>
+                                            <TableCell>Кількість</TableCell>
+                                            <TableCell>Сума</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -331,12 +331,12 @@ const Content = () => {
                                     </TableBody>
                                 </Table>
                                 <Box display={"flex"} justifyContent={"flex-end"} marginRight={"10px"} padding={"10px 0px"}>
-                                    Full price: {currentOrder.reduce((a, b) => a + b.amount*b.product_price, 0)} грн
+                                    Сума замовлення: {currentOrder.reduce((a, b) => a + b.amount*b.product_price, 0)} грн
                                 </Box>
                             </TableContainer>
                         </Box>
                     </Modal>
-                    <Button sx={{marginBottom:"15px"}} variant={"contained"} onClick={e => setModal(true)}>Create new order</Button>
+                    <Button sx={{marginBottom:"15px"}} variant={"contained"} onClick={e => setModal(true)}>Зробити замовлення</Button>
                     <TableContainer sx={{width:"50%", maxHeight:"700px"}} component={Paper}>
                         <Table stickyHeader size={"medium"}>
                             <TableHead>
@@ -346,7 +346,7 @@ const Content = () => {
                                     <TableCell>Заклад</TableCell>
                                     <TableCell>Сума</TableCell>
                                     <TableCell>Статус</TableCell>
-                                    <TableCell>ІНФО</TableCell>
+                                    <TableCell>Детально</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
