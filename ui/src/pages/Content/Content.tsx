@@ -14,13 +14,15 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 import cl from './Content.module.css'
-import {Api, GetMenu, GetOrder, GetPlaces} from "../../api/Api";
+import {Api, GetMenu, GetOrder, GetPlaces, OrderDesc} from "../../api/Api";
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import {useDispatch, useSelector} from "react-redux";
 import {SelectUserItems, SelectUserOrders} from "../../redux/store/user/selector";
 import {setItems, setOrders} from "../../redux/store/user/slice";
 import moment from "moment";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import {LoadingButton} from "@mui/lab";
 
 const min = 1;
 const max = 100;
@@ -35,6 +37,10 @@ const Content = () => {
     const [value, setValue] = useState<number>(1);
     const [modal, setModal] = useState(false);
     const history = useSelector(SelectUserOrders);
+    const [loadingButton, setLoadingButton] = useState(false);
+    const [selectedId, setSelectedId] = useState(-1);
+
+    const [currentOrder, setCurrentOrder] = useState<OrderDesc[]>([]);
 
     const [messageHandler, setMessageHandler] = useState({type: "" as AlertProps["severity"], message: ""});
     const reduxItems = useSelector(SelectUserItems);
@@ -71,7 +77,8 @@ const Content = () => {
 
             const promise2 = new Promise((resolve, reject) => {
                 api.getHistory().then(res => {
-                    setOrders(res.data.history);
+                    console.log(res)
+                    dispatch(setOrders(res.data.history));
                     resolve(true);
                 }).catch(err => {
                     reject(err);
@@ -122,6 +129,51 @@ const Content = () => {
             dispatch(setItems({idShop: parseInt(selectedPlace), items: [...reduxItems.items, ...order]}))
         } else {
             setMessageHandler({type: "error", message: "Можна створити заказ лише з одного закладу"})
+        }
+    }
+
+    const compliteOrder = (e, id) => {
+        const api = new Api();
+        api.compliteOrder(id).then(res=>{
+            // setMessageHandler({type: "success", message: "Замовлення №" +id+ " підтверджено!"})
+            const newHistory = history.map(x=>{
+                if(x.id === id)
+                {
+                    const newValue = {
+                        id: x.id,
+                        created_time: x.created_time,
+                        is_delivered: true,
+                        place: x.place,
+                        sum: x.sum
+                    } as GetOrder
+                    x = newValue;
+                }
+                return x;
+            })
+            console.log(newHistory)
+            dispatch(setOrders(newHistory));
+        }).catch(err=>{
+            console.log(err)
+            // setMessageHandler({type: "error", message: "Замовлення №" +id+ " не підтверджено!"})
+        })
+    }
+
+    const getDescOrder = (e, id) => {
+        setLoadingButton(true);
+        try {
+            const api = new Api();
+            api.getDescOrder(id).then(res => {
+                console.log(res)
+                setCurrentOrder(res.data.details);
+                setSelectedId(id);
+                setLoadingButton(false)
+            }).catch(err => {
+                console.log(err);
+                setLoadingButton(false)
+            });
+        } catch (e) {
+            setLoadingButton(false)
+            console.log(e)
         }
     }
 
@@ -242,9 +294,51 @@ const Content = () => {
             </Modal>
             {loading ? <CircularProgress/> :
                 <Box display={"flex"} width={"100%"} flexDirection={"column"} alignItems={"center"}>
+                    <Modal
+                        open={currentOrder.length > 0}
+                        onClose={e => setCurrentOrder([])}
+                        aria-labelledby="parent-modal-title"
+                        aria-describedby="parent-modal-description"
+                    >
+                        <Box sx={{
+                            ...style,
+                            minHeight: "600px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
+                            width: 800
+                        }}>
+                            <h2 id="parent-modal-title">Your order #{selectedId}</h2>
+                            <TableContainer component={Paper}>
+                                <Table sx={{maxHeight:"500px", overflowY:"auto"}}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Product</TableCell>
+                                            <TableCell>Price per 1</TableCell>
+                                            <TableCell>Count</TableCell>
+                                            <TableCell>Sum</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        { currentOrder.map(g => (
+                                                <TableRow key={g.product}>
+                                                    <TableCell>{g.product}</TableCell>
+                                                    <TableCell>{g.product_price}грн</TableCell>
+                                                    <TableCell>{g.amount}</TableCell>
+                                                    <TableCell>{g.amount * g.product_price}грн</TableCell>
+                                                </TableRow>))}
+                                    </TableBody>
+                                </Table>
+                                <Box display={"flex"} justifyContent={"flex-end"} marginRight={"10px"} padding={"10px 0px"}>
+                                    Full price: {currentOrder.reduce((a, b) => a + b.amount*b.product_price, 0)} грн
+                                </Box>
+                            </TableContainer>
+                        </Box>
+                    </Modal>
                     <Button sx={{marginBottom:"15px"}} variant={"contained"} onClick={e => setModal(true)}>Create new order</Button>
-                    <TableContainer sx={{width:"50%"}} component={Paper}>
-                        <Table size={"medium"}>
+                    <TableContainer sx={{width:"50%", maxHeight:"700px"}} component={Paper}>
+                        <Table stickyHeader size={"medium"}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>ID</TableCell>
@@ -252,6 +346,7 @@ const Content = () => {
                                     <TableCell>Place</TableCell>
                                     <TableCell>Sum</TableCell>
                                     <TableCell>Is Delivered</TableCell>
+                                    <TableCell>INFO</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -261,7 +356,8 @@ const Content = () => {
                                             <TableCell>{moment.unix(h.created_time).format("MM-DD-YYYY")}</TableCell>
                                             <TableCell>{h.place}</TableCell>
                                             <TableCell>{h.sum}</TableCell>
-                                            <TableCell>{h.is_delivered ? "Виконано" : "В процесі"}</TableCell>
+                                            <TableCell>{h.is_delivered ? "Виконано" : <Button variant={"contained"} onClick={e=>compliteOrder(e, h.id)}>Підтвердити</Button>}</TableCell>
+                                            <TableCell><IconButton onClick={e=>getDescOrder(e, h.id)}>{loadingButton ? <CircularProgress/> : <InfoOutlinedIcon/>}</IconButton></TableCell>
                                         </TableRow>)) :
                                     <TableRow><TableCell align={"center"} colSpan={5}>No data found!</TableCell></TableRow>}
                             </TableBody>
