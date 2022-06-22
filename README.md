@@ -8,7 +8,7 @@ HOW TO RUN
 -
 
 Terminal 1 (to start back-end):
-```bash for windows
+```cmd
 pip install -r reqiurements.txt
 $env:FLASK_APP="flaskr/main"
 flask run
